@@ -10,21 +10,27 @@ import {
   ActivityIndicator 
 } from 'react-native';
 
+// Componente principal de la aplicación
 export default function App() {
+  // Estado para almacenar los personajes
   const [characters, setCharacters] = useState([]);
+  // Estado para manejar la carga de datos
   const [loading, setLoading] = useState(true);
+  // Estado para manejar errores en la carga de datos
   const [error, setError] = useState(null);
 
+  // useEffect para ejecutar la función fetchCharacters una sola vez al montar el componente
   useEffect(() => {
     fetchCharacters();
   }, []);
 
+  // Función asincrónica para obtener los personajes de la API
   const fetchCharacters = async () => {
     try {
       const response = await fetch('https://rickandmortyapi.com/api/character');
       const data = await response.json();
-      setCharacters(data.results);
-      setLoading(false);
+      setCharacters(data.results); // Guardamos los resultados en el estado
+      setLoading(false); // Indicamos que la carga ha finalizado
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('No se pudieron cargar los personajes. Por favor, intenta más tarde.');
@@ -32,6 +38,7 @@ export default function App() {
     }
   };
 
+  // Función para renderizar cada tarjeta de personaje en la lista
   const renderCharacterCard = ({ item }) => (
     <View style={styles.card}>
       <Image 
@@ -50,6 +57,7 @@ export default function App() {
     </View>
   );
 
+  // Si los datos están cargando, mostramos un indicador de carga
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
@@ -59,6 +67,7 @@ export default function App() {
     );
   }
 
+  // Si hubo un error, mostramos un mensaje de error
   if (error) {
     return (
       <View style={styles.errorContainer}>
@@ -71,6 +80,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" backgroundColor="#293844" />
       
+      {/* Encabezado de la aplicación */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Api React Native</Text>
         <Text style={styles.headerText}>
@@ -79,6 +89,7 @@ export default function App() {
         <Text style={styles.headerSubtitle}>Estudiante: Juan David Escobar Corrales</Text>
       </View>
 
+      {/* Lista de personajes usando FlatList */}
       <FlatList
         data={characters}
         renderItem={renderCharacterCard}
@@ -90,6 +101,7 @@ export default function App() {
   );
 }
 
+// Estilos de la aplicación
 const styles = StyleSheet.create({
   container: {
     flex: 1,
